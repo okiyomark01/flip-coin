@@ -1,0 +1,25 @@
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL") // Set this in the .env file
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Player {
+  id       Int     @id @default(autoincrement())
+  balance  Float   @default(10.0) // Starting balance for each player
+  predictions Prediction[]
+}
+
+model Prediction {
+  id        Int      @id @default(autoincrement())
+  outcome   String
+  userGuess String
+  playerId  Int
+  player    Player   @relation(fields: [playerId], references: [id])
+  createdAt DateTime @default(now())
+}
+
